@@ -1,8 +1,7 @@
 # CryptoStats
 
-This is my first personal MVVM Android Kotlin project with Jetpack. 
+Android application about a cryptocurrency tracker, where you can follow any crypto you are interested in.
 
-It’s a Crypto Tracker, where you can follow any crypto you are interested in.
 I used the following libraries and components:
 - #Retrofit to consume REST API. In particular I used Lunar and Nomics API to get all crypto information such as name, price, news etc. 
 -#Room to create a local database, where App can save user preferences as settings and crypto watchlist
