@@ -2,6 +2,16 @@
 
 Android application about a cryptocurrency tracker, where you can follow any crypto you are interested in.
 
+<br>
+<p align="center">
+  <img src="readme/screen1.png" width="200">
+  <img src="readme/screen2.png" width="200">
+  <img src="readme/screen3.png" width="200">
+  <img src="readme/screen4.png" width="200">
+  <img src="readme/screen5.png" width="200">
+
+</p>
+
 I used the following libraries and components:
 - #Retrofit to consume REST API. In particular I used Lunar and Nomics API to get all crypto information such as name, price, news etc. 
 -#Room to create a local database, where App can save user preferences as settings and crypto watchlist
