@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.gwyro.cryptostats.ui.home.HomeFragment"
+        android:label="@string/label_watchlist"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_home_to_detailCrypto"
+            app:destination="@id/navigation_detail_crypto"
+            app:enterAnim="@anim/enter_from_left"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_left" />
+
+        <action
+            android:id="@+id/action_home_to_cryptoList"
+            app:destination="@id/navigation_crypto_list"
+            app:enterAnim="@anim/enter_from_left"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_detail_crypto"
+        android:name="com.gwyro.cryptostats.ui.home.DetailCryptoFragment"
+        android:label="@string/label_crypto_detail"
+        tools:layout="@layout/fragment_detail_crypto">
+
+        <argument
+            android:name="currency"
+            android:defaultValue=""
+            app:argType="string" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_crypto_list"
+        android:name="com.gwyro.cryptostats.ui.home.CryptoListFragment"
+        android:label="@string/label_all_crypto"
+        tools:layout="@layout/fragment_list_crypto" />
+
+    <fragment
+        android:id="@+id/navigation_news"
+        android:name="com.gwyro.cryptostats.ui.news.NewsFragment"
+        android:label="@string/label_news"
+        tools:layout="@layout/fragment_news">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_extra"
+        android:name="com.gwyro.cryptostats.ui.home.DetailCryptoFragment"
+        android:label="@string/label_extra"
+        tools:layout="@layout/fragment_detail_crypto">
+
+        <argument
+            android:name="currency"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.gwyro.cryptostats.ui.settings.SettingsFragment"
+        android:label="@string/label_settings" />
+</navigation>

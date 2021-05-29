@@ -1,0 +1,22 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="languages_entries">
+        <item>EN</item>
+        <item>IT</item>
+    </string-array>
+
+    <string-array name="languages_values">
+        <item>EN</item>
+        <item>IT</item>
+    </string-array>
+
+    <string-array name="currencies_entries">
+        <item>EUR</item>
+        <item>USD</item>
+    </string-array>
+
+    <string-array name="currencies_values">
+        <item>EUR</item>
+        <item>USD</item>
+    </string-array>
+</resources>

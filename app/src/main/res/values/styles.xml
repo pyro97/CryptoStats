@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomDialogTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.App.ActionMode" parent="Widget.AppCompat.ActionMode">
+        <item name="titleTextStyle">?attr/textAppearanceHeadline6</item>
+        <item name="subtitleTextStyle">?attr/textAppearanceSubtitle1</item>
+        <item name="background">@color/material_grey_900</item>
+        <item name="colorAccent">@color/white</item>
+    </style>
+
+    <style name="Preferences" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/teal_200</item>
+        <item name="dialogTheme">@style/AppCompatAlert</item>
+        <item name="alertDialogTheme">@style/AppCompatAlert</item>
+        <item name="alertDialogStyle">@style/AppCompatAlert</item>
+    </style>
+    <style name="AppCompatAlert" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="textColorAlertDialogListItem">@color/black</item>
+        <item name="checkboxStyle">@style/Checkbox</item>
+        <item name="android:colorBackground">@color/white</item>
+    </style>
+
+    <style name="Checkbox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+
+    </style>
+</resources>
