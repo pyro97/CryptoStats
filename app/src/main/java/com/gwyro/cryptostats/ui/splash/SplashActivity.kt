@@ -1,4 +1,4 @@
-package com.gwyro.cryptostats.splash
+package com.gwyro.cryptostats.ui.splash
 
 import android.content.Intent
 import android.os.Bundle

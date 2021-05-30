@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_icon_tracker"
         android:supportsRtl="true"
         android:theme="@style/Theme.Bitcoin">
-        <activity android:name="com.gwyro.cryptostats.splash.SplashActivity">
+        <activity android:name="com.gwyro.cryptostats.ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
