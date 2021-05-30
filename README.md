@@ -4,14 +4,14 @@ Android application about a cryptocurrency tracker, where you can follow any cry
 
 <br>
 <p align="center">
-  <img src="readme/screen6.png" width="200" height="350">
-  <img src="readme/screen1.png" width="200" height="350">
-  <img src="readme/screen8.png" width="200" height="350">
-  <img src="readme/screen3.png" width="200" height="350">
-  <img src="readme/screen5.png" width="200" height="350">
-  <img src="readme/screen2.png" width="200" height="350">
-  <img src="readme/screen4.png" width="200" height="350">
-  <img src="readme/screen9.png" width="200" height="350">
+  <img src="readme/screen6.png" width="200" height="380">
+  <img src="readme/screen1.png" width="200" height="380">
+  <img src="readme/screen8.png" width="200" height="380">
+  <img src="readme/screen3.png" width="200" height="380">
+  <img src="readme/screen5.png" width="200" height="380">
+  <img src="readme/screen2.png" width="200" height="380">
+  <img src="readme/screen4.png" width="200" height="380">
+  <img src="readme/screen9.png" width="200" height="380">
 
 
 </p>
