@@ -27,6 +27,5 @@ Android application about a cryptocurrency tracker, where you can follow any cry
 2. **data**: It contains all the data accessing and manipulating components.
 3. **di**: Dependency providing classes using Dagger2.
 4. **domain**: It contains domain and model objects.
-5. **splah**: It contains domain and model objects.
 6. **ui**: View classes along with their corresponding ViewModel.
 7. **utils**: Utility classes.
