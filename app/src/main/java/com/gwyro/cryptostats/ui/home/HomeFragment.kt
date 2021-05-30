@@ -149,7 +149,9 @@ class HomeFragment : Fragment() {
             }
         }
         binding.llError.setOnClickListener {
-            homeViewModel.updateCryptoList()
+            if (Utils.isNetworkAvailable(requireContext())){
+                homeViewModel.updateCryptoList()
+            }
         }
     }
 

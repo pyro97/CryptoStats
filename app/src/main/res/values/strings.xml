@@ -10,7 +10,7 @@
     <string name="none">N/A</string>
     <string name="detail_max_supply">Max supply</string>
     <string name="detail_circulating_supply">Circulating supply</string>
-    <string name="no_crypto_watch">No cryptocurrency on your Watchlist. Click add \"icon\"!</string>
+    <string name="no_crypto_watch">No Crypto in your Watchlist.</string>
     <string name="no_internet_connection">No internet connection!</string>
     <string name="title_news">News</string>
     <string name="title_extra">Extra</string>

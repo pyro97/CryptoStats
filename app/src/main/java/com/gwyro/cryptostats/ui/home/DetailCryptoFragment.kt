@@ -183,6 +183,23 @@ class DetailCryptoFragment : Fragment() {
             }
         }
 
+        homeViewModel.updateCryptoList.observe(viewLifecycleOwner){
+            it?.let {
+                if(it){
+                    showProgress()
+                    cryptoDetailEnabled(true)
+                    homeViewModel.getCoinOfTheDay()
+                }
+            }
+        }
+
+
+        binding.llError.setOnClickListener {
+            if (Utils.isNetworkAvailable(requireContext())){
+                homeViewModel.updateCryptoList()
+            }
+        }
+
         binding.llDetail.isVisible = false
         showProgress()
         if (!isCoinOfTheDay) {

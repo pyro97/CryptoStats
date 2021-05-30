@@ -92,6 +92,23 @@ class NewsFragment : Fragment() {
             }
         }
 
+        newsViewModel.updateCryptoList.observe(viewLifecycleOwner){
+            it?.let {
+                if(it){
+                    showProgress()
+                    cryptoNewsEnabled(true)
+                    newsViewModel.getCryptoNews()
+                }
+            }
+        }
+
+
+        binding.llError.setOnClickListener {
+            if (Utils.isNetworkAvailable(requireContext())){
+                newsViewModel.updateCryptoList()
+            }
+        }
+
         showProgress()
         if (Utils.isNetworkAvailable(requireContext())) {
             cryptoNewsEnabled(true)
