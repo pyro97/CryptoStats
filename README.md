@@ -34,4 +34,8 @@ Android application about a cryptocurrency tracker, where you can follow any cry
 7. **LiveData** to create observable objects that respects lifecycle of other app components
 8. **Coroutines** to convert async callbacks for long-running tasks into sequential code
 
-  <img src="readme/mvvm.png" width="300">
+<p align="center">
+
+  <img src="readme/mvvm.png" width="500">
+ 
+ </p>
