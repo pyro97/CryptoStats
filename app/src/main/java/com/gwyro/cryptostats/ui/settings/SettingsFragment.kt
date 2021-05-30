@@ -11,7 +11,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.gwyro.cryptostats.R
 import com.gwyro.cryptostats.utils.KEY_NOTIFICATIONS
-import com.gwyro.cryptostats.work.NotifyWorker
+import com.gwyro.cryptostats.utils.workers.NotifyWorker
 import java.util.concurrent.TimeUnit
 
 class SettingsFragment : PreferenceFragmentCompat() {

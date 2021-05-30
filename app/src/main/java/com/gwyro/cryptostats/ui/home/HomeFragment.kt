@@ -29,7 +29,7 @@ import com.gwyro.cryptostats.databinding.FragmentHomeBinding
 import com.gwyro.cryptostats.domain.entities.CryptoItem
 import com.gwyro.cryptostats.ui.home.adapter.WatchListAdapterAdapter
 import com.gwyro.cryptostats.utils.Utils
-import com.gwyro.cryptostats.work.NotifyWorker
+import com.gwyro.cryptostats.utils.workers.NotifyWorker
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 

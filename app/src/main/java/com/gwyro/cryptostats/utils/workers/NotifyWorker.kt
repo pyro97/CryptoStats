@@ -1,4 +1,4 @@
-package com.gwyro.cryptostats.work
+package com.gwyro.cryptostats.utils.workers
 
 import android.app.Notification.DEFAULT_ALL
 import android.app.NotificationChannel
