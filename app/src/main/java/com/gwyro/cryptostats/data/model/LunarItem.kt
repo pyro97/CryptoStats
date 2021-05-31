@@ -1,7 +1,7 @@
 package com.gwyro.cryptostats.data.model
 
 data class LunarItem(
-    val data: List<DataLunarItem>
+    val data: MutableList<DataLunarItem>
 )
 
 data class DataLunarItem(
