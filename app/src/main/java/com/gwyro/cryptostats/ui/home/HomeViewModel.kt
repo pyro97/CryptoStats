@@ -56,6 +56,10 @@ open class HomeViewModel @Inject constructor(
     val detailCryptoItem: LiveData<LunarDetailItem>
         get() = _detailCryptoItem
 
+    private val _coinOfTheDay = MutableLiveData<Boolean>()
+    val coinOfTheDay: LiveData<Boolean>
+        get() = _coinOfTheDay
+
     fun fillList() {
         _cryptoItem.value?.clear()
         val lista = mutableListOf<CryptoItem>()
@@ -94,7 +98,7 @@ open class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getCryptoList(symbols: String, currency: String, isCoinOfTheDay: Boolean) {
+    fun getCryptoList(symbols: String, currency: String) {
         viewModelScope.launch {
             when (val result = useCaseCryptoInfo.getCryptoValueNomics(symbols, currency)) {
                 is com.gwyro.cryptostats.utils.Result.Success -> {
@@ -212,7 +216,7 @@ open class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = useCaseCryptoInfo.getCryptoOfTheDay()) {
                 is com.gwyro.cryptostats.utils.Result.Success -> {
-                    getCryptoList(result.data.data.symbol, getCurrency(), true)
+                    getCryptoList(result.data.data.symbol, getCurrency())
                 }
                 else -> _errorCall.postValue(true)
             }
@@ -243,11 +247,29 @@ open class HomeViewModel @Inject constructor(
         sharedPreferencesStorage.checkDefaultValues()
     }
 
-    fun clearData(){
-        _errorCall.value = false
-        nomics.clear()
-        _cryptoItem.value?.clear()
-        _lunar.value?.data?.clear()
+    fun clearData(coinOfTheDay: Boolean, fromDetail: Boolean){
+        when {
+            coinOfTheDay -> {
+                _detailCryptoItem.value?.data?.clear()
+                _errorCall.value = false
+                nomics.clear()
+                _cryptoItem.value?.clear()
+                _lunar.value?.data?.clear()
+                _coinOfTheDay.value = true
+            }
+            fromDetail -> {
+                _coinOfTheDay.value = false
+                _detailCryptoItem.value?.data?.clear()
+            }
+            else -> {
+                _detailCryptoItem.value?.data?.clear()
+                _errorCall.value = false
+                nomics.clear()
+                _cryptoItem.value?.clear()
+                _lunar.value?.data?.clear()
+                _coinOfTheDay.value = false
+            }
+        }
     }
 
 }

@@ -6,6 +6,8 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
@@ -41,13 +43,14 @@ class DetailCryptoFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        homeViewModel.clearData()
         setHasOptionsMenu(true)
         if (args.currency.isNotEmpty()) {
             isCoinOfTheDay = false
             currency = args.currency
+            homeViewModel.clearData(coinOfTheDay = false,fromDetail = true)
         } else {
             isCoinOfTheDay = true
+            homeViewModel.clearData(coinOfTheDay = true,fromDetail = true)
         }
 
     }
@@ -138,6 +141,8 @@ class DetailCryptoFragment : Fragment() {
                 it.data.let { list ->
                     if (list.isNotEmpty()) {
                         fillLastDetails(list[0])
+                        hideProgress()
+                        binding.llDetail.isVisible = true
                     }
                 }
             }
@@ -214,8 +219,6 @@ class DetailCryptoFragment : Fragment() {
         } else {
             detailItem.short_summary
         }
-        hideProgress()
-        binding.llDetail.isVisible = true
     }
 
     private fun fillCoinDetails(){

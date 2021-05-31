@@ -53,7 +53,13 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel.setDefaultValues()
-        homeViewModel.clearData()
+        homeViewModel.coinOfTheDay.let {
+            it.value?.let { value ->
+                if(value){
+                    homeViewModel.clearData(coinOfTheDay = false,fromDetail = false)
+                }
+            }
+        }
         setHasOptionsMenu(true)
         deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)!!
         colorDrawableBackground = ColorDrawable(resources.getColor(R.color.red, null))
@@ -141,8 +147,7 @@ class HomeFragment : Fragment() {
                 ) {
                     homeViewModel.getCryptoList(
                         stringBuilder.toString(),
-                        homeViewModel.getCurrency(),
-                        false
+                        homeViewModel.getCurrency()
                     )
                 } else {
                     homeViewModel.updateErrorCall()
