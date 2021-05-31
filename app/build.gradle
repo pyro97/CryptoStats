@@ -16,12 +16,11 @@ android {
         applicationId 'com.gwyro.bittracker'
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 3
+        versionCode 5
         versionName "1.0"
         buildConfigField("String" , "API_KEY_LUNAR", API_KEY_LUNAR)
         buildConfigField("String" , "API_KEY_NOMICS", API_KEY_NOMICS)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += [
@@ -31,15 +30,15 @@ android {
             }
         }
 
-
-
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug // <-- ADD THIS TO SIGN WITH YOUR DEBUG CERTIFICATE
+            debuggable true     // <-- ADD THIS
         }
     }
 
@@ -116,7 +115,6 @@ dependencies {
     //Hilt viewModel
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt 'androidx.hilt:hilt-compiler:1.0.0'
-
 
 
     /*
