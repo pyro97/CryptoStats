@@ -22,6 +22,7 @@ import com.crazylegend.viewbinding.viewBinding
 import com.gwyro.cryptostats.R
 import com.gwyro.cryptostats.common.CustomProgressDialog
 import com.gwyro.cryptostats.data.db.UserCrypto
+import com.gwyro.cryptostats.data.model.DetailsLunarItem
 import com.gwyro.cryptostats.databinding.FragmentDetailCryptoBinding
 import com.gwyro.cryptostats.domain.entities.CryptoItem
 import com.gwyro.cryptostats.utils.MetrixUtils
@@ -40,6 +41,7 @@ class DetailCryptoFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        homeViewModel.clearData()
         setHasOptionsMenu(true)
         if (args.currency.isNotEmpty()) {
             isCoinOfTheDay = false
@@ -60,13 +62,18 @@ class DetailCryptoFragment : Fragment() {
 
     private fun checkCryptoNotification(item: MenuItem) {
         cryptoUser?.let {
-            if (it.isFavourite) {
-                homeViewModel.updateUserCrypto(UserCrypto(it.id, it.name, it.currency, false))
-                item.setIcon(R.drawable.ic_notif_disabled)
+            if(Utils.isNetworkAvailable(requireContext())){
+                if (it.isFavourite) {
+                    homeViewModel.updateUserCrypto(UserCrypto(it.id, it.name, it.currency, false))
+                    item.setIcon(R.drawable.ic_notif_disabled)
+                } else {
+                    homeViewModel.updateUserCrypto(UserCrypto(it.id, it.name, it.currency, true))
+                    item.setIcon(R.drawable.ic_notif_active)
+                }
             } else {
-                homeViewModel.updateUserCrypto(UserCrypto(it.id, it.name, it.currency, true))
-                item.setIcon(R.drawable.ic_notif_active)
+                homeViewModel.updateErrorCall()
             }
+
         }
     }
 
@@ -90,20 +97,28 @@ class DetailCryptoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.llDetail.isVisible = false
+        initCrypto()
 
-        if (!isCoinOfTheDay) {
-            homeViewModel.getUserCrypto()
+        homeViewModel.lunar.observe(viewLifecycleOwner) {
+            homeViewModel.fillList()
         }
 
-        fillCoinDetails()
-
+        homeViewModel.cryptoItem.observe(viewLifecycleOwner) {
+            if (isCoinOfTheDay && !it.isNullOrEmpty()) {
+                if (!it[0].currency.isNullOrEmpty()){
+                    currency = it[0].currency!!
+                    fillCoinDetails()
+                } else {
+                    homeViewModel.updateErrorCall()
+                }
+            }
+        }
 
 
         homeViewModel.userCrypto.observe(viewLifecycleOwner) {
             it?.let { list ->
-                for (item in list) {
-                    if (!isCoinOfTheDay) {
+                if (!isCoinOfTheDay) {
+                    for (item in list) {
                         if (item.currency == currency) {
                             cryptoUser = item
                             if (!item.isFavourite) {
@@ -113,21 +128,7 @@ class DetailCryptoFragment : Fragment() {
                             break
                         }
                     }
-                }
-            }
-
-        }
-
-
-        homeViewModel.errorCall.observe(viewLifecycleOwner) {
-            it?.let {
-                if (it) {
-                    hideProgress()
-                    if (!Utils.isNetworkAvailable(requireContext())) {
-                        cryptoDetailEnabled(false)
-                    } else {
-                        cryptoDetailEnabled(true)
-                    }
+                    fillCoinDetails()
                 }
             }
         }
@@ -136,70 +137,16 @@ class DetailCryptoFragment : Fragment() {
             it?.let {
                 it.data.let { list ->
                     if (list.isNotEmpty()) {
-                        val detailItem = list[0]
-                        binding.itemSite.apply {
-                            setTextColor(Color.CYAN)
-                            paintFlags = binding.itemSite.paintFlags or Paint.UNDERLINE_TEXT_FLAG
-                            setOnClickListener {
-                                var link = detailItem.website_link
-                                if (detailItem.website_link.contains(",")) {
-                                    link = detailItem.website_link.substring(
-                                        0,
-                                        detailItem.website_link.indexOf(",")
-                                    )
-                                }
-
-                                if (!link.startsWith("http://") && !link.startsWith("https://")) {
-                                    link = "http://$link"
-                                }
-                                val builder = CustomTabsIntent.Builder()
-                                val customTabsIntent: CustomTabsIntent = builder.build()
-                                customTabsIntent.launchUrl(requireContext(), Uri.parse(link))
-                            }
-                        }
-                        binding.summaryItem.text = if (detailItem.short_summary.isNullOrEmpty()) {
-                            resources.getString(R.string.none)
-                        } else {
-                            detailItem.short_summary
-                        }
-                        hideProgress()
-                        binding.llDetail.isVisible = true
+                        fillLastDetails(list[0])
                     }
                 }
-            }
-        }
-
-        homeViewModel.dayCrypto.observe(viewLifecycleOwner) {
-            if (!progressDialog?.isShowing!!) {
-                showProgress()
-                binding.llDetail.isVisible = false
-            }
-            if (isCoinOfTheDay && !it.isNullOrEmpty()) {
-                val item = it[0]
-                item.currency?.let {
-                    homeViewModel.getCryptoDetails(item.currency)
-                    setImage(item)
-                }
-            }
-        }
-
-        homeViewModel.lunaraDay.observe(viewLifecycleOwner) {
-            it?.let {
-                homeViewModel.fillListCoiOfTheDay()
             }
         }
 
         homeViewModel.updateCryptoList.observe(viewLifecycleOwner){
             it?.let {
                 if(it){
-                    showProgress()
-                   // cryptoDetailEnabled(true)
-                    if (isCoinOfTheDay){
-                        homeViewModel.getCoinOfTheDay()
-                    } else {
-                        homeViewModel.getUserCrypto()
-                        fillCoinDetails()
-                    }
+                    initCrypto()
                 }
             }
         }
@@ -207,16 +154,71 @@ class DetailCryptoFragment : Fragment() {
 
         binding.llError.setOnClickListener {
             if (Utils.isNetworkAvailable(requireContext())){
+                cryptoDetailEnabled(true)
                 homeViewModel.updateCryptoList()
             }
         }
 
+        homeViewModel.errorCall.observe(viewLifecycleOwner) {
+            it?.let {
+                if (it) {
+                    hideProgress()
+                    if (!Utils.isNetworkAvailable(requireContext())) {
+                        cryptoDetailEnabled(false)
+                        findNavController().popBackStack()
+                    } else {
+                        cryptoDetailEnabled(true)
+                    }
+                }
+            }
+        }
 
     }
 
-    fun fillCoinDetails(){
+    private fun initCrypto() {
         showProgress()
-        if (!isCoinOfTheDay) {
+        if (Utils.isNetworkAvailable(requireContext())) {
+            if (!isCoinOfTheDay) {
+                homeViewModel.getUserCrypto()
+            } else {
+                homeViewModel.getCoinOfTheDay()
+            }
+        } else {
+            homeViewModel.updateErrorCall()
+        }
+    }
+
+    private fun fillLastDetails(detailItem: DetailsLunarItem){
+        binding.itemSite.apply {
+            setTextColor(Color.CYAN)
+            paintFlags = binding.itemSite.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            setOnClickListener {
+                var link = detailItem.website_link
+                if (detailItem.website_link.contains(",")) {
+                    link = detailItem.website_link.substring(
+                        0,
+                        detailItem.website_link.indexOf(",")
+                    )
+                }
+
+                if (!link.startsWith("http://") && !link.startsWith("https://")) {
+                    link = "http://$link"
+                }
+                val builder = CustomTabsIntent.Builder()
+                val customTabsIntent: CustomTabsIntent = builder.build()
+                customTabsIntent.launchUrl(requireContext(), Uri.parse(link))
+            }
+        }
+        binding.summaryItem.text = if (detailItem.short_summary.isNullOrEmpty()) {
+            resources.getString(R.string.none)
+        } else {
+            detailItem.short_summary
+        }
+        hideProgress()
+        binding.llDetail.isVisible = true
+    }
+
+    private fun fillCoinDetails(){
             homeViewModel.cryptoItem.value?.let { list ->
                 for (item in list) {
                     if (item.currency == currency) {
@@ -225,13 +227,6 @@ class DetailCryptoFragment : Fragment() {
                     }
                 }
             }
-        } else {
-            if (Utils.isNetworkAvailable(requireContext())) {
-                homeViewModel.getCoinOfTheDay()
-            } else {
-                homeViewModel.updateErrorCall()
-            }
-        }
     }
 
     private fun setImage(item: CryptoItem) {
@@ -301,9 +296,8 @@ class DetailCryptoFragment : Fragment() {
                 item.max_supply ?: resources.getString(R.string.none)
             )
             if (Utils.isNetworkAvailable(requireContext())) {
-                if (!isCoinOfTheDay) {
-                    homeViewModel.getCryptoDetails(currency)
-                }
+                homeViewModel.getCryptoDetails(currency)
+
             } else {
                 homeViewModel.updateErrorCall()
             }

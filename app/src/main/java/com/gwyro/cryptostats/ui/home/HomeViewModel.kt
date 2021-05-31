@@ -26,13 +26,7 @@ open class HomeViewModel @Inject constructor(
     val cryptoItem: LiveData<MutableList<CryptoItem>>
         get() = _cryptoItem
 
-    private val _dayCrypto = MutableLiveData<MutableList<CryptoItem>>()
-    val dayCrypto: LiveData<MutableList<CryptoItem>>
-        get() = _dayCrypto
-
-    private var nomics: List<NomicsItem> = listOf()
-
-    private var nomicsDay: MutableList<NomicsItem> = mutableListOf()
+    private var nomics: MutableList<NomicsItem> = mutableListOf()
 
     private val _allCrypto = MutableLiveData<MutableList<CryptoItem>>()
     val allCrypto: LiveData<MutableList<CryptoItem>>
@@ -41,10 +35,6 @@ open class HomeViewModel @Inject constructor(
     private val _lunar = MutableLiveData<LunarItem>()
     val lunar: LiveData<LunarItem>
         get() = _lunar
-
-    private val _lunarDay = MutableLiveData<LunarItem>()
-    val lunaraDay: LiveData<LunarItem>
-        get() = _lunarDay
 
     val _errorCall = MutableLiveData<Boolean>()
     val errorCall: LiveData<Boolean>
@@ -104,52 +94,12 @@ open class HomeViewModel @Inject constructor(
         }
     }
 
-    fun fillListCoiOfTheDay() {
-        val lista = mutableListOf<CryptoItem>()
-        nomicsDay.let { nm ->
-            nm.let {
-                for (item in nm) {
-                    val crytpos = CryptoItem(
-                        0,
-                        item.name,
-                        item.currency,
-                        item.price,
-                        0.0,
-                        item.logo_url,
-                        item.circulating_supply,
-                        item.market_cap,
-                        item.max_supply,
-                        true
-                    )
-                    _lunarDay.let { lun ->
-                        val lunData = lun.value?.data
-                        lunData?.let { dataLun ->
-                            for (lunarItem in dataLun) {
-                                if (lunarItem.symbol == crytpos.currency) {
-                                    crytpos.percent_change_24h = lunarItem.percent_change_24h
-                                }
-                            }
-                        }
-
-                    }
-                    lista.add(crytpos)
-                }
-                _dayCrypto.value = lista
-            }
-
-        }
-    }
-
     fun getCryptoList(symbols: String, currency: String, isCoinOfTheDay: Boolean) {
         viewModelScope.launch {
             when (val result = useCaseCryptoInfo.getCryptoValueNomics(symbols, currency)) {
                 is com.gwyro.cryptostats.utils.Result.Success -> {
                     result.data.let {
-                        if (isCoinOfTheDay) {
-                            nomicsDay = it.toMutableList()
-                        } else {
-                            nomics = it
-                        }
+                        nomics = it.toMutableList()
                     }
                 }
                 else -> _errorCall.postValue(true)
@@ -158,20 +108,12 @@ open class HomeViewModel @Inject constructor(
             when (val resultLunar = useCaseCryptoInfo.getCryptoValueLunar(symbols)) {
                 is com.gwyro.cryptostats.utils.Result.Success -> {
                     resultLunar.data.let {
-                        if (isCoinOfTheDay) {
-                            _lunarDay.postValue(it)
-                        } else {
-                            _lunar.postValue(it)
-                        }
+                        _lunar.postValue(it)
                     }
                 }
                 else -> {
                     _errorCall.postValue(true)
-                    if (isCoinOfTheDay) {
-                        fillList()
-                    } else {
-                        fillListCoiOfTheDay()
-                    }
+                    fillList()
                 }
             }
         }
@@ -267,9 +209,6 @@ open class HomeViewModel @Inject constructor(
     }
 
     fun getCoinOfTheDay() {
-        _dayCrypto.value?.clear()
-        nomicsDay.clear()
-        _errorCall.value = false
         viewModelScope.launch {
             when (val result = useCaseCryptoInfo.getCryptoOfTheDay()) {
                 is com.gwyro.cryptostats.utils.Result.Success -> {
@@ -302,6 +241,13 @@ open class HomeViewModel @Inject constructor(
 
     fun setDefaultValues() {
         sharedPreferencesStorage.checkDefaultValues()
+    }
+
+    fun clearData(){
+        _errorCall.value = false
+        nomics.clear()
+        _cryptoItem.value?.clear()
+        _lunar.value?.data?.clear()
     }
 
 }

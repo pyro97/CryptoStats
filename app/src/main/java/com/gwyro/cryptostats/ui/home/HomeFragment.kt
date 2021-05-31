@@ -53,6 +53,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeViewModel.setDefaultValues()
+        homeViewModel.clearData()
         setHasOptionsMenu(true)
         deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)!!
         colorDrawableBackground = ColorDrawable(resources.getColor(R.color.red, null))
