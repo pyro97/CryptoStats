@@ -90,9 +90,15 @@ class DetailCryptoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.llDetail.isVisible = false
+
         if (!isCoinOfTheDay) {
             homeViewModel.getUserCrypto()
         }
+
+        fillCoinDetails()
+
+
 
         homeViewModel.userCrypto.observe(viewLifecycleOwner) {
             it?.let { list ->
@@ -156,11 +162,11 @@ class DetailCryptoFragment : Fragment() {
                         } else {
                             detailItem.short_summary
                         }
+                        hideProgress()
+                        binding.llDetail.isVisible = true
                     }
                 }
             }
-            hideProgress()
-            binding.llDetail.isVisible = true
         }
 
         homeViewModel.dayCrypto.observe(viewLifecycleOwner) {
@@ -170,9 +176,9 @@ class DetailCryptoFragment : Fragment() {
             }
             if (isCoinOfTheDay && !it.isNullOrEmpty()) {
                 val item = it[0]
-                setImage(item)
                 item.currency?.let {
                     homeViewModel.getCryptoDetails(item.currency)
+                    setImage(item)
                 }
             }
         }
@@ -187,8 +193,13 @@ class DetailCryptoFragment : Fragment() {
             it?.let {
                 if(it){
                     showProgress()
-                    cryptoDetailEnabled(true)
-                    homeViewModel.getCoinOfTheDay()
+                   // cryptoDetailEnabled(true)
+                    if (isCoinOfTheDay){
+                        homeViewModel.getCoinOfTheDay()
+                    } else {
+                        homeViewModel.getUserCrypto()
+                        fillCoinDetails()
+                    }
                 }
             }
         }
@@ -200,13 +211,17 @@ class DetailCryptoFragment : Fragment() {
             }
         }
 
-        binding.llDetail.isVisible = false
+
+    }
+
+    fun fillCoinDetails(){
         showProgress()
         if (!isCoinOfTheDay) {
             homeViewModel.cryptoItem.value?.let { list ->
                 for (item in list) {
                     if (item.currency == currency) {
                         setImage(item)
+                        break
                     }
                 }
             }
@@ -217,7 +232,6 @@ class DetailCryptoFragment : Fragment() {
                 homeViewModel.updateErrorCall()
             }
         }
-
     }
 
     private fun setImage(item: CryptoItem) {
@@ -231,7 +245,6 @@ class DetailCryptoFragment : Fragment() {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    binding.itemImg.setImageResource(R.mipmap.ic_loading)
                     fillCard(item)
                     return false
                 }

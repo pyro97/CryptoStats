@@ -22,8 +22,8 @@ open class HomeViewModel @Inject constructor(
     private val sharedPreferencesStorage: SharedPreferenceStorage,
 ) : ViewModel(), LifecycleObserver {
 
-    private val _cryptoItem = MutableLiveData<List<CryptoItem>>()
-    val cryptoItem: LiveData<List<CryptoItem>>
+    private val _cryptoItem = MutableLiveData<MutableList<CryptoItem>>()
+    val cryptoItem: LiveData<MutableList<CryptoItem>>
         get() = _cryptoItem
 
     private val _dayCrypto = MutableLiveData<MutableList<CryptoItem>>()
@@ -67,6 +67,7 @@ open class HomeViewModel @Inject constructor(
         get() = _detailCryptoItem
 
     fun fillList() {
+        _cryptoItem.value?.clear()
         val lista = mutableListOf<CryptoItem>()
         nomics.let { nm ->
             nm.let {
