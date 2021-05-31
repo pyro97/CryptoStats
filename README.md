@@ -4,7 +4,7 @@ Android application about a cryptocurrency tracker, where you can follow any cry
 
 <br>
 <p align="center">
-  <img src="readme/crypto.gif" width="200">
+  <img src="readme/crypto.gif" width="400">
 </p>
 
 #### The app has following packages:
