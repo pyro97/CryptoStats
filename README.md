@@ -30,3 +30,5 @@ Android application about a cryptocurrency tracker, where you can follow any cry
   <img src="readme/mvvm3.jpeg" width="500">
  
  </p>
+ 
+ N.B.: You have to add your API keys in gradle.properties
