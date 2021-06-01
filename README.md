@@ -27,6 +27,6 @@ Android application about a cryptocurrency tracker, where you can follow any cry
 
 <p align="center">
 
-  <img src="readme/mvvm1.png" width="500">
+  <img src="readme/mvvm2.jpeg" width="500">
  
  </p>
