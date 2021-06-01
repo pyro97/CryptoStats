@@ -161,7 +161,6 @@ class CryptoListFragment : Fragment() {
 
     private fun listItemClicked(selectedItem: CryptoItem) {
         if (Utils.isNetworkAvailable(requireContext())) {
-            showProgress()
             if (selectedItem.favourite) {
                 homeViewModel.addUserCrypto(
                     UserCrypto(

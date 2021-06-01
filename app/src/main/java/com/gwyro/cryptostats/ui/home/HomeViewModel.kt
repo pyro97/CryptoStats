@@ -256,10 +256,14 @@ open class HomeViewModel @Inject constructor(
                 _cryptoItem.value?.clear()
                 _lunar.value?.data?.clear()
                 _coinOfTheDay.value = true
+                _updateCryptoList.value = false
             }
             fromDetail -> {
+                _errorCall.value = false
                 _coinOfTheDay.value = false
                 _detailCryptoItem.value?.data?.clear()
+                _userCrypto.value?.clear()
+                _updateCryptoList.value = false
             }
             else -> {
                 _detailCryptoItem.value?.data?.clear()
@@ -268,6 +272,7 @@ open class HomeViewModel @Inject constructor(
                 _cryptoItem.value?.clear()
                 _lunar.value?.data?.clear()
                 _coinOfTheDay.value = false
+                _updateCryptoList.value = false
             }
         }
     }

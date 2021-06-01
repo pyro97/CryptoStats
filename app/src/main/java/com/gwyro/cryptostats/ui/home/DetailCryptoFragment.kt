@@ -6,8 +6,6 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.*
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
@@ -39,7 +37,6 @@ class DetailCryptoFragment : Fragment() {
     private var isCoinOfTheDay = false
     private var menu: Menu? = null
     private var cryptoUser: UserCrypto? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,7 +117,7 @@ class DetailCryptoFragment : Fragment() {
 
         homeViewModel.userCrypto.observe(viewLifecycleOwner) {
             it?.let { list ->
-                if (!isCoinOfTheDay) {
+                if (!list.isNullOrEmpty() && !isCoinOfTheDay) {
                     for (item in list) {
                         if (item.currency == currency) {
                             cryptoUser = item
@@ -170,7 +167,6 @@ class DetailCryptoFragment : Fragment() {
                     hideProgress()
                     if (!Utils.isNetworkAvailable(requireContext())) {
                         cryptoDetailEnabled(false)
-                        findNavController().popBackStack()
                     } else {
                         cryptoDetailEnabled(true)
                     }
@@ -199,19 +195,21 @@ class DetailCryptoFragment : Fragment() {
             paintFlags = binding.itemSite.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             setOnClickListener {
                 var link = detailItem.website_link
-                if (detailItem.website_link.contains(",")) {
-                    link = detailItem.website_link.substring(
-                        0,
-                        detailItem.website_link.indexOf(",")
-                    )
-                }
+                if(!detailItem.website_link.isNullOrEmpty()){
+                    if (detailItem.website_link.contains(",")) {
+                        link = detailItem.website_link.substring(
+                            0,
+                            detailItem.website_link.indexOf(",")
+                        )
+                    }
 
-                if (!link.startsWith("http://") && !link.startsWith("https://")) {
-                    link = "http://$link"
+                    if (!link.startsWith("http://") && !link.startsWith("https://")) {
+                        link = "http://$link"
+                    }
+                    val builder = CustomTabsIntent.Builder()
+                    val customTabsIntent: CustomTabsIntent = builder.build()
+                    customTabsIntent.launchUrl(requireContext(), Uri.parse(link))
                 }
-                val builder = CustomTabsIntent.Builder()
-                val customTabsIntent: CustomTabsIntent = builder.build()
-                customTabsIntent.launchUrl(requireContext(), Uri.parse(link))
             }
         }
         binding.summaryItem.text = if (detailItem.short_summary.isNullOrEmpty()) {
