@@ -9,7 +9,7 @@ Google Play: https://bit.ly/3pre86T
   <img src="readme/crypto_video.gif" width="300">
 </p>
 
-#### The app has following packages:
+#### This app has following packages:
 1. **common**: It contains common components.
 2. **data**: It contains all the data accessing and manipulating components.
 3. **di**: Dependency providing classes using Dagger2.
