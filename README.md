@@ -1,6 +1,7 @@
 # CryptoStats
 
 Android application about a cryptocurrency tracker, where you can follow any crypto you are interested in.
+<br>
 Google Play: https://play.google.com/store/apps/details?id=com.gwyro.bittracker&hl=it&gl=US
 
 <br>
