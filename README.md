@@ -2,7 +2,6 @@
 
 Android application about a cryptocurrency tracker, where you can follow any crypto you are interested in.
 <br>
-Google Play: https://bit.ly/3pre86T
 
 <br>
 <p align="center">
